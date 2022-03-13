@@ -1,0 +1,56 @@
+# NOTE: update this with your service name
+service: crs-jatayu
+
+
+
+plugins:
+  - serverless-bundle # Package our functions with Webpack
+  - serverless-offline
+  - serverless-dotenv-plugin # Load .env as environment variables
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  region: eu-west-1
+  profile: serverlessUser
+  # To load environment variables externally
+  # rename env.example to .env and uncomment
+  # the following line. Also, make sure to not
+  # commit your .env.
+  #
+  # environment:
+  #   DATABASE_URL: ${env:DATABASE_URL}
+   
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - http:
+          path: /hello
+          method: get
+  addState: 
+    handler: lambdas/state/addState.handler
+    events:
+      - http:
+          path: /state/add
+          method: post
+  deleteState:
+    handler: lambdas/state/deleteState.handler
+    events:
+      - http:
+          path: /state/delete/{id}
+          method: post
+
+      
+      
+
+
+package:
+  individually: true
+  exclude:
+    - '!node_modules/.prisma/client/libquery_engine-*'
+    - 'node_modules/.prisma/client/libquery_engine-rhel-*'
+    - 'src/**/*'
+    - '*.eslint'

@@ -1,0 +1,130 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model State{
+  id Int @id @default(autoincrement())
+  name String @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  City City[]
+}
+model City{
+  id Int @id @default(autoincrement())
+  name String @unique
+  stateId Int
+  state State @relation(fields: [stateId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Hotel Hotel[]
+}
+
+model Hotel{
+  id Int @id @default(autoincrement())
+  name String 
+  address String
+  email String
+  phoneNumber String
+  cityId Int
+  city City @relation(fields: [cityId],references: [id])
+  room Room[]
+  sellables Sellables[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Room{
+  id Int @id @default(autoincrement())
+  type String
+  beds Int
+  description String 
+  hotelId Int
+  hotel Hotel @relation(fields: [hotelId],references: [id])
+  price Decimal 
+  checkInTime String
+  faucility Facility[]
+  images Image[]
+  availablity Availablity[]
+  booking Booking[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Image{
+  id Int @id @default(autoincrement())
+  roomId Int
+  room Room @relation(fields: [roomId],references: [id])
+  imageUrl String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Facility{
+  id Int @id @default(autoincrement())
+  roomId Int
+  room Room @relation(fields: [roomId],references: [id])
+  typeid Int
+  faucility FacilityTypes @relation(fields: [typeid],references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model FacilityTypes{
+  id Int @id @default(autoincrement())
+  name String
+  fontawsomeClass String
+  faucility Facility[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Availablity{
+  id Int @id @default(autoincrement())
+  roomId Int
+  room Room @relation(fields: [roomId],references: [id])
+  quantity Int
+  date DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Booking{
+  id Int @id @default(autoincrement())
+  roomId Int
+  userid String
+  date DateTime
+  Price Decimal
+  room Room @relation(fields: [roomId],references: [id])
+  soldOut SoldOut[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Sellables{
+  id Int @id @default(autoincrement())
+  name String
+  hotelId Int
+  price Decimal
+  hotel Hotel @relation(fields: [hotelId],references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  soldout SoldOut[]
+}
+
+model SoldOut{
+  id Int @id @default(autoincrement())
+  bookingId Int
+  booking Booking @relation(fields: [bookingId],references: [id])
+  sellableid Int
+  sellable Sellables @relation(fields: [sellableid],references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
