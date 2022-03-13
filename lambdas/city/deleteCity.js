@@ -1,21 +1,19 @@
 'use strict'
-import {PrismaClient} from "@prisma/client"
-exports.handler =  async(event) => {
+import { PrismaClient } from '@prisma/client';
+exports.handler = async(event) =>{
     const prisma = new PrismaClient();
-    const {id} =event.pathParameters;
-    // console.log(id);
-    const deleted = await prisma.state.delete({
+    const {id} = event.pathParameters;
+    const city = await prisma.city.delete({
         where:{
             id:Number(id)
         }
     }).then(resp=>true)
     .catch(err=>false);
-    // console.log(deleted);
-    if(!deleted){
+    if(!city){
         return {
             statusCode:500,
             body:JSON.stringify({
-                message:"Something went wrong"
+                error:'Something went wrong'
             }),
             headers:{
                 'Content-Type':'application/json',
@@ -26,12 +24,11 @@ exports.handler =  async(event) => {
     return {
         statusCode:200,
         body:JSON.stringify({
-            message:"Successfully Deleted"
+            message:'Successfully deleted'
         }),
         headers:{
             'Content-Type':'application/json',
             'Accept':'application/json'
         }
     }
-
 }

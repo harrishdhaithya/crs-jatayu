@@ -42,6 +42,35 @@ functions:
       - http:
           path: /state/delete/{id}
           method: post
+  getState:
+    handler: lambdas/state/getStates.handler
+    events:
+      - http:
+          path: /states
+          method: get
+  addCity:
+    handler: lambdas/city/addCity.handler
+    events:
+      - http:
+          path: /city/add
+          method: post
+  deleteCity:
+    handler: lambdas/city/deleteCity.handler
+    events:
+      - http:
+          path: /city/delete/{id}
+          method: post
+  getCities:
+    handler: lambdas/city/getCities.handler
+    events:
+      - http:
+          path: /cities
+          method: get
+
+      
+      
+          
+      
 
       
       

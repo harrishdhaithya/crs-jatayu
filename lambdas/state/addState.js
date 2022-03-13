@@ -2,7 +2,7 @@
 import {} from "aws-sdk";
 import {PrismaClient} from "@prisma/client";
 
-exports.handler = async function (event, context) {
+exports.handler = async (event) => {
     console.log(event.body);
     const {name} = JSON.parse(event.body);
     var prisma = new PrismaClient();
