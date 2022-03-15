@@ -19,13 +19,20 @@ exports.handler = async (event) => {
             body:JSON.stringify({
                 error:"Something went wrong"
             }),
-            headers:{
-                'Content-Type':'application/json'
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Methods': '*',
+                'Access-Control-Allow-Origin': '*',
             }
         }
     }
     return {
         statusCode:200,
-        body: JSON.stringify(record)
+        body: JSON.stringify(record),
+        headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Methods': '*',
+            'Access-Control-Allow-Origin': '*',
+        }
     }
 };

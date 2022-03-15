@@ -1,15 +1,15 @@
 'use strict'
-import { PrismaClient } from '@prisma/client';
-exports.handler = async(event) =>{
+import {PrismaClient} from "@prisma/client";
+exports.handler = (event) => {
     const prisma = new PrismaClient();
-    const {id} = event.pathParameters;
-    const city = await prisma.city.delete({
-        where:{
-            id:Number(id)
+    const hotels = prisma.hotel.findMany({
+        include:{
+            city:true,
+            room:true
         }
     }).then(resp=>true)
     .catch(err=>false);
-    if(!city){
+    if(!hotels){
         return {
             statusCode:500,
             body:JSON.stringify({
@@ -20,17 +20,18 @@ exports.handler = async(event) =>{
                 'Access-Control-Allow-Methods': '*',
                 'Access-Control-Allow-Origin': '*',
             }
-        }
+        };
     }
     return {
         statusCode:200,
         body:JSON.stringify({
-            message:'Successfully deleted'
+            error:'Successfully Added'
         }),
         headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Methods': '*',
             'Access-Control-Allow-Origin': '*',
         }
-    }
+    };
+
 }

@@ -31,8 +31,8 @@ model Hotel{
   id Int @id @default(autoincrement())
   name String 
   address String
-  email String
-  phoneNumber String
+  email String @unique
+  phoneNumber String @unique
   cityId Int
   city City @relation(fields: [cityId],references: [id])
   room Room[]

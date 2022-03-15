@@ -30,6 +30,7 @@ functions:
       - http:
           path: /hello
           method: get
+          cors: true
   addState: 
     handler: lambdas/state/addState.handler
     events:
@@ -41,31 +42,101 @@ functions:
     events:
       - http:
           path: /state/delete/{id}
-          method: post
+          method: delete
+          cors: true
   getState:
     handler: lambdas/state/getStates.handler
     events:
       - http:
           path: /states
           method: get
+          cors: true
   addCity:
     handler: lambdas/city/addCity.handler
     events:
       - http:
           path: /city/add
           method: post
+          cors: true
   deleteCity:
     handler: lambdas/city/deleteCity.handler
     events:
       - http:
           path: /city/delete/{id}
-          method: post
+          method: delete
+          cors: true
   getCities:
     handler: lambdas/city/getCities.handler
     events:
       - http:
           path: /cities
           method: get
+          cors: true
+  addHotel:
+    handler: lambdas/hotel/addHotel.handler
+    events:
+    - http:
+        path: /hotel/add
+        method: post
+        cors: true
+  deleteHotel:
+    handler: lambdas/hotel/deleteHotel.handler
+    events:
+      - http:
+          path: /hotel/delete/{id}
+          method: delete
+          cors: true
+  getHotels:
+    handler: lambdas/hotel/getHotels.handler
+    event:
+      - http:
+          path: /hotels
+          method: get
+          cors: true
+  updateHotel:
+    handler: lambdas/hotel/updateHotel.handler
+    events:
+      - http:
+          path: /hotel/update/{id}
+          method: patch
+          cors: true
+  addRoom:
+    handler: lambdas/room/addRoom.handler
+    events:
+      - http:
+          path: /room/add
+          method: post
+          cors: true
+  deleteRoom:
+    handler: lambdas/room/deleteRoom.handler
+    events:
+      - http:
+          path: /room/delete/{id}
+          method: delete
+          cors: true
+  getRooms:
+    handler: lambdas/room/getRooms.handler
+    events:
+      - http:
+          path: /rooms
+          method: get
+          cors: true
+  updateRoom:
+    handler: lambdas/room/updateRoom.handler
+    events:
+      - http:
+          path: /room/update/{id}
+          method: patch
+          cors: true
+      
+      
+      
+      
+
+      
+      
+      
+    
 
       
       

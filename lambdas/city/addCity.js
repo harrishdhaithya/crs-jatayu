@@ -18,9 +18,10 @@ exports.handler = async (event) => {
             body:JSON.stringify({
                 error:'Something went wrong'
             }),
-            headers:{
-                'Content-Type':'application/json',
-                'Accept':'application/json'
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Methods': '*',
+                'Access-Control-Allow-Origin': '*',
             }
         }
     }
@@ -29,9 +30,10 @@ exports.handler = async (event) => {
         body:JSON.stringify({
             message:'Successfully Inserted'
         }),
-        headers:{
-            'Content-Type':'application/json',
-            'Accept':'application/json'
+        headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Methods': '*',
+            'Access-Control-Allow-Origin': '*',
         }
     }
 }
