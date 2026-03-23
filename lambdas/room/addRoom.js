@@ -1,21 +1,22 @@
 'use strict'
 import { PrismaClient } from "@prisma/client";
 
+const prisma = new PrismaClient();
+
 exports.handler = async (event) => {
-    const prisma = new PrismaClient();
-    const {type,beds,description,hotelId,price,checkInTime} = JSON.parse(event.body);
+    const { type, beds, description, hotelId, price, checkInTime } = JSON.parse(event.body);
+
     const room = await prisma.room.create({
-        data:{
-            type,beds,description,hotelId:Number(hotelId),price:parseFloat(price),checkInTime
+        data: {
+            type, beds, description, hotelId: Number(hotelId), price: parseFloat(price), checkInTime
         }
-    }).then(resp=>true)
-    .then(err=>false);
-    if(!room){
+    }).then(resp => true)
+    .catch(err => false);
+
+    if (!room) {
         return {
-            statusCode:500,
-            body:JSON.stringify({
-                error:'Something went wrong'
-            }),
+            statusCode: 500,
+            body: JSON.stringify({ error: 'Something went wrong' }),
             headers: {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Methods': '*',
@@ -24,10 +25,8 @@ exports.handler = async (event) => {
         };
     }
     return {
-        statusCode:500,
-        body:JSON.stringify({
-            message:"Successfully Created"
-        }),
+        statusCode: 200,
+        body: JSON.stringify({ message: 'Successfully Created' }),
         headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Methods': '*',

@@ -1,22 +1,20 @@
 'use strict'
+import { PrismaClient } from "@prisma/client";
 
-import {PrismaClient} from "@prisma/client";
+const prisma = new PrismaClient();
 
 exports.handler = async (event) => {
-    const {id} = event.pathParameter;
-    const prisma = new PrismaClient();
+    const { id } = event.pathParameters;
+
     const booking = await prisma.booking.delete({
-        where:{
-            id
-        }
-    }).then(resp=>true)
-    .catch(err=>false);
-    if(!booking){
+        where: { id: Number(id) }
+    }).then(resp => true)
+    .catch(err => false);
+
+    if (!booking) {
         return {
-            statusCode:500,
-            body:JSON.stringify({
-                error:'Something went wrong'
-            }),
+            statusCode: 500,
+            body: JSON.stringify({ error: 'Something went wrong' }),
             headers: {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Methods': '*',
@@ -25,10 +23,8 @@ exports.handler = async (event) => {
         };
     }
     return {
-        statusCode:200,
-        body:JSON.stringify({
-            error:'Booking Successfull'
-        }),
+        statusCode: 200,
+        body: JSON.stringify({ message: 'Booking Cancelled Successfully' }),
         headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Methods': '*',

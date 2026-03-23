@@ -1,38 +1,26 @@
 'use strict'
-import {PrismaClient} from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 
-exports.handler = async(event) => {
-    const {roomId,quantity,date} = JSON.parse(event.body);
-    const prisma = new PrismaClient();
-    const availablity = await prisma.availablity.create({
-        data:{
-            roomId:Number(roomId),
-            quantity,date
-        }
-    }).then(resp=>true)
-    .catch(err=>false);
-    if(!availablity){
+const prisma = new PrismaClient();
+
+exports.handler = async (event) => {
+    const { roomId, quantity, date } = JSON.parse(event.body);
+
+    const availability = await prisma.availablity.create({
+        data: { roomId: Number(roomId), quantity: Number(quantity), date: new Date(date) }
+    }).then(resp => true)
+    .catch(err => false);
+
+    if (!availability) {
         return {
-            statusCode:500,
-            body:JSON.stringify({
-                error:'Something went wrong'
-            }),
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Methods': '*',
-                'Access-Control-Allow-Origin': '*',
-            }
+            statusCode: 500,
+            body: JSON.stringify({ error: 'Something went wrong' }),
+            headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
         };
     }
     return {
-        statusCode:200,
-        body:JSON.stringify({
-            message: 'Successfully Added'
-        }),
-        headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Methods': '*',
-            'Access-Control-Allow-Origin': '*',
-        }
+        statusCode: 200,
+        body: JSON.stringify({ message: 'Successfully Added' }),
+        headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
     };
 }

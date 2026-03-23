@@ -1,31 +1,29 @@
 'use strict'
-import {  PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 
-exports.handler = async(event) => {
-    const prisma = new PrismaClient();
-    const {roomId,userid,date,Price} = JSON.parse(event.body);
-    const room = await prisma.availablity.findFirst({
-        select:{
-            quantity:true
-        },
-        where:{
-            roomId,date
-        }
-    }).then(res=>res)
-    .catch(err=>0);
-    if(room>0){
+const prisma = new PrismaClient();
+
+exports.handler = async (event) => {
+    const { roomId, userid, date, Price } = JSON.parse(event.body);
+
+    const availability = await prisma.availablity.findFirst({
+        select: { quantity: true },
+        where: { roomId: Number(roomId), date: new Date(date) }
+    }).then(res => res)
+    .catch(err => null);
+
+    if (availability?.quantity > 0) {
         const booking = await prisma.booking.create({
-            data:{
-                roomId,userid,date,Price
+            data: {
+                roomId: Number(roomId), userid, date: new Date(date), Price: parseFloat(Price)
             }
-        }).then(resp=>true)
-        .catch(err=>false);
-        if(!booking){
+        }).then(resp => true)
+        .catch(err => false);
+
+        if (!booking) {
             return {
-                statusCode:500,
-                body:JSON.stringify({
-                    error:'Something went wrong'
-                }),
+                statusCode: 500,
+                body: JSON.stringify({ error: 'Something went wrong' }),
                 headers: {
                     'Content-Type': 'application/json',
                     'Access-Control-Allow-Methods': '*',
@@ -34,10 +32,8 @@ exports.handler = async(event) => {
             };
         }
         return {
-            statusCode:200,
-            body:JSON.stringify({
-                error:'Booking Succesfull'
-            }),
+            statusCode: 200,
+            body: JSON.stringify({ message: 'Booking Successful' }),
             headers: {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Methods': '*',
@@ -45,11 +41,10 @@ exports.handler = async(event) => {
             }
         };
     }
+
     return {
-        statusCode:500,
-        body:JSON.stringify({
-            error:'Not able to book the room'
-        }),
+        statusCode: 400,
+        body: JSON.stringify({ error: 'Room not available for the selected date' }),
         headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Methods': '*',
