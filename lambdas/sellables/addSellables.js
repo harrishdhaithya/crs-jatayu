@@ -1,9 +1,10 @@
 'use strict'
 import {PrismaClient} from '@prisma/client';
 
+const prisma = new PrismaClient();
+
 exports.handler = async(event) => {
     const {name,hotelId,price} = JSON.parse(event.body);
-    const prisma = new PrismaClient();
     const sellables = await prisma.sellables.create({
         data:{
             name,hotelId:Number(hotelId),price:parseFloat(price)
@@ -26,7 +27,7 @@ exports.handler = async(event) => {
     return {
         statusCode:200,
         body:JSON.stringify({
-            error:'Successfull'
+            message:'Successfully Added'
         }),
         headers: {
             'Content-Type': 'application/json',

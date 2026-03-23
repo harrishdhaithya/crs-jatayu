@@ -1,20 +1,21 @@
 'use strict'
-import {PrismaClient} from "@prisma/client";
-exports.handler = (event) => {
-    const prisma = new PrismaClient();
-    const hotels = prisma.hotel.findMany({
-        include:{
-            city:true,
-            room:true
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
+
+exports.handler = async (event) => {
+    const hotels = await prisma.hotel.findMany({
+        include: {
+            city: true,
+            room: true
         }
-    }).then(resp=>true)
-    .catch(err=>false);
-    if(!hotels){
+    }).then(resp => resp)
+    .catch(err => false);
+
+    if (!hotels) {
         return {
-            statusCode:500,
-            body:JSON.stringify({
-                error:'Something went wrong'
-            }),
+            statusCode: 500,
+            body: JSON.stringify({ error: 'Something went wrong' }),
             headers: {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Methods': '*',
@@ -23,15 +24,12 @@ exports.handler = (event) => {
         };
     }
     return {
-        statusCode:200,
-        body:JSON.stringify({
-            error:'Successfully Added'
-        }),
+        statusCode: 200,
+        body: JSON.stringify(hotels),
         headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Methods': '*',
             'Access-Control-Allow-Origin': '*',
         }
     };
-
 }

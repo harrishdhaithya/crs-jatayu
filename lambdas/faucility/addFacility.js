@@ -1,8 +1,9 @@
 'use strict'
 import { PrismaClient } from '@prisma/client';
 
+const prisma = new PrismaClient();
+
 exports.handler = async(event) => {
-    const prisma = new PrismaClient();
     const {roomId,typeid} = JSON.parse(event.body);
     const facility = await prisma.facility.create({
         data:{

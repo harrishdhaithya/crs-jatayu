@@ -1,12 +1,9 @@
-# NOTE: update this with your service name
 service: crs-jatayu
 
-
-
 plugins:
-  - serverless-bundle # Package our functions with Webpack
+  - serverless-bundle
   - serverless-offline
-  - serverless-dotenv-plugin # Load .env as environment variables
+  - serverless-dotenv-plugin
 
 provider:
   name: aws
@@ -14,14 +11,8 @@ provider:
   stage: dev
   region: eu-west-1
   profile: serverlessUser
-  # To load environment variables externally
-  # rename env.example to .env and uncomment
-  # the following line. Also, make sure to not
-  # commit your .env.
-  #
-  # environment:
-  #   DATABASE_URL: ${env:DATABASE_URL}
-   
+  environment:
+    DATABASE_URL: ${env:DATABASE_URL}
 
 functions:
   hello:
@@ -31,12 +22,15 @@ functions:
           path: /hello
           method: get
           cors: true
-  addState: 
+
+  # State
+  addState:
     handler: lambdas/state/addState.handler
     events:
       - http:
           path: /state/add
           method: post
+          cors: true
   deleteState:
     handler: lambdas/state/deleteState.handler
     events:
@@ -44,13 +38,15 @@ functions:
           path: /state/delete/{id}
           method: delete
           cors: true
-  getState:
+  getStates:
     handler: lambdas/state/getStates.handler
     events:
       - http:
           path: /states
           method: get
           cors: true
+
+  # City
   addCity:
     handler: lambdas/city/addCity.handler
     events:
@@ -72,13 +68,15 @@ functions:
           path: /cities
           method: get
           cors: true
+
+  # Hotel
   addHotel:
     handler: lambdas/hotel/addHotel.handler
     events:
-    - http:
-        path: /hotel/add
-        method: post
-        cors: true
+      - http:
+          path: /hotel/add
+          method: post
+          cors: true
   deleteHotel:
     handler: lambdas/hotel/deleteHotel.handler
     events:
@@ -88,7 +86,7 @@ functions:
           cors: true
   getHotels:
     handler: lambdas/hotel/getHotels.handler
-    event:
+    events:
       - http:
           path: /hotels
           method: get
@@ -100,6 +98,8 @@ functions:
           path: /hotel/update/{id}
           method: patch
           cors: true
+
+  # Room
   addRoom:
     handler: lambdas/room/addRoom.handler
     events:
@@ -128,24 +128,100 @@ functions:
           path: /room/update/{id}
           method: patch
           cors: true
-      
-      
-      
-      
 
-      
-      
-      
-    
+  # Availability
+  addAvailability:
+    handler: lambdas/availablity/addAvailablity.handler
+    events:
+      - http:
+          path: /availability/add
+          method: post
+          cors: true
+  updateAvailability:
+    handler: lambdas/availablity/updateAvailablity.handler
+    events:
+      - http:
+          path: /availability/update
+          method: patch
+          cors: true
 
-      
-      
-          
-      
+  # Booking
+  createBooking:
+    handler: lambdas/booking/createBooking.handler
+    events:
+      - http:
+          path: /booking/create
+          method: post
+          cors: true
+  cancelBooking:
+    handler: lambdas/booking/cancelBooking.handler
+    events:
+      - http:
+          path: /booking/cancel/{id}
+          method: delete
+          cors: true
 
-      
-      
+  # Facility Types
+  addFacType:
+    handler: lambdas/faucility/addFacType.handler
+    events:
+      - http:
+          path: /factype/add
+          method: post
+          cors: true
+  deleteFacType:
+    handler: lambdas/faucility/deleteFacType.handler
+    events:
+      - http:
+          path: /factype/delete/{id}
+          method: delete
+          cors: true
+  getFacTypes:
+    handler: lambdas/faucility/getFacTypes.handler
+    events:
+      - http:
+          path: /factypes
+          method: get
+          cors: true
 
+  # Facility
+  addFacility:
+    handler: lambdas/faucility/addFacility.handler
+    events:
+      - http:
+          path: /facility/add
+          method: post
+          cors: true
+  deleteFacility:
+    handler: lambdas/faucility/deleteFacility.handler
+    events:
+      - http:
+          path: /facility/delete/{id}
+          method: delete
+          cors: true
+  getHotelFac:
+    handler: lambdas/faucility/getHotelFac.handler
+    events:
+      - http:
+          path: /facility/room/{id}
+          method: get
+          cors: true
+
+  # Sellables
+  addSellables:
+    handler: lambdas/sellables/addSellables.handler
+    events:
+      - http:
+          path: /sellable/add
+          method: post
+          cors: true
+  deleteSellable:
+    handler: lambdas/sellables/deleteSellable.handler
+    events:
+      - http:
+          path: /sellable/delete/{id}
+          method: delete
+          cors: true
 
 package:
   individually: true
