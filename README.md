@@ -176,6 +176,4 @@ serverless deploy
 }
 ```
 
-## License
 
-MIT
